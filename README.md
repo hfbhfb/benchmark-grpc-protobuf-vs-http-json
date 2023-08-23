@@ -1,3 +1,14 @@
+
+## 为什么要在容器化环境下测试
+
+1. 此基准测试走网络,需要有方法排除网络因素的影响
+
+2. 使用多协程的方式运行,引入并发
+
+3. 使用k8s时间片limit功能限制程序对cpu的使用,压满cpu对应的处理能力以达到基准测试效果(即在某些cpu限制条件下,处理能力表现为线性增长)
+
+---
+
 ### gRPC+Protobuf or JSON+HTTP?
 
 This repository contains 2 equal APIs: gRPC using Protobuf and JSON over HTTP. The goal is to run benchmarks for 2 approaches and compare them. APIs have 1 endpoint to create user, containing validation of request. Request, validation and response are the same in 2 packages, so we're benchmarking only mechanism itself. Benchmarks also include response parsing.

@@ -1,0 +1,6 @@
+envs:
+    - ENV-SERVER-GRPC=
+    - ENV-SERVER-HTTP=
+    - ENV-CLIENT-GRPC=
+    - ENV-CLIENT-HTTP=
+    
