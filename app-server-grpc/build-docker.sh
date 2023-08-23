@@ -18,6 +18,8 @@ IMageName=benchmark-grpc
 Version=v0.1
 docker build -f ./Dockerfile_grpc -t docker.io/$IMageName:$Version .
 
+docker tag $IMageName:$Version docker.io/hefabao/$DockerImgName:$DockerImgVersion
+
 ### 上传到docker hub官方镜像仓库
 docker push docker.io/$IMageName:$Version
 
