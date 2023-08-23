@@ -16,18 +16,17 @@ EOF
 
 IMageName=benchmark-grpc
 Version=v0.1
-docker build -f ./Dockerfile_grpc -t docker.io/$IMageName:$Version .
+docker build -f ./Dockerfile_grpc -t $IMageName:$Version .
 
-docker tag $IMageName:$Version docker.io/hefabao/$DockerImgName:$DockerImgVersion
+docker tag $IMageName:$Version docker.io/hefabao/$IMageName:$Version
 
 ### 上传到docker hub官方镜像仓库
-docker push docker.io/$IMageName:$Version
+docker push docker.io/hefabao/$IMageName:$Version
 
 }
 
 
 build-docker
-
 
 
 
