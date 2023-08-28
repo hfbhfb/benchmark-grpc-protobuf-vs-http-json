@@ -75,25 +75,25 @@ kubectl apply -f grpc-delay-10ms.yaml
 
 httpdelay(){
 
-cat > http-server.yaml <<EOF
+cat > http-delay.yaml <<EOF
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: http-server
-  name: http-server
+    app: http-delay
+  name: http-delay
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: http-server
+      app: http-delay
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: http-server
+        app: http-delay
     spec:
       containers:
       - image: docker.io/hefabao/$IMageName:$Version
@@ -115,24 +115,24 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    app: http-server
-  name: http-server
+    app: http-delay
+  name: http-delay
 spec:
   ports:
   - name: p60001
     port: 60001
     protocol: TCP
     targetPort: 60001
-    nodePort: 30601
+    nodePort: 30901
   selector:
-    app: http-server
+    app: http-delay
   type: NodePort
 ---
 
   
 EOF
 
-kubectl apply -f http-server.yaml
+kubectl apply -f http-delay.yaml
 
 }
 
