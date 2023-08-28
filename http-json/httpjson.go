@@ -14,6 +14,7 @@ var (
 
 // Start entrypoint
 func StartDelay() {
+	FlagSleep = true
 	http.HandleFunc("/", CreateUser)
 	log.Println(http.ListenAndServe(":60001", nil))
 }

@@ -15,7 +15,7 @@ CMD [ "sh", "-c", "/app-10ms" ]
 EOF
 
 IMageName=benchmark-grpc
-Version=v0.1-delay
+Version=v0.3-delay
 docker build -f ./Dockerfile_grpc -t $IMageName:$Version .
 
 docker tag $IMageName:$Version docker.io/hefabao/$IMageName:$Version

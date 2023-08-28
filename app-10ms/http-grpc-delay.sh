@@ -3,7 +3,7 @@
 
 IMageName=benchmark-grpc
 
-Version=v0.1-delay
+Version=v0.3-delay
 
 
 grpcdelay(){

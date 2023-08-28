@@ -19,6 +19,7 @@ var (
 // Start entrypoint
 func StartDelay() {
 	lis, _ := net.Listen("tcp", ":80")
+	FlagSleep = true
 
 	srv := grpc.NewServer()
 	proto.RegisterAPIServer(srv, &Server{})

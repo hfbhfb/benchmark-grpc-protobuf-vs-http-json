@@ -15,7 +15,7 @@ func init() {
 }
 
 func BenchmarkGRPCProtobuf(b *testing.B) {
-	goRouting := 8
+	goRouting := 20
 	aCount := b.N / goRouting
 
 	var n sync.WaitGroup
