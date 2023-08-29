@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"sync"
 	"testing"
 	"time"
 
@@ -16,33 +17,41 @@ func init() {
 
 }
 
-func BenchmarkHTTPJSONMultiConn(b *testing.B) {
+func BenchmarkHTTPJSONMultiConn10m(b *testing.B) {
 	b.Log(b.N)
-	for i := 0; i < 100; i++ {
-		conn, err := net.Dial("tcp", "192.168.1.81:30901")
-		if err != nil {
-			fmt.Println("Error connecting:", err)
-			return
-		}
-		defer conn.Close()
+	goRouting := 100
+	var n sync.WaitGroup
+	for i := 1; i <= goRouting; i++ {
+		n.Add(1)
+		go func(amount int) {
+			conn, err := net.Dial("tcp", "192.168.1.81:30901")
+			if err != nil {
+				fmt.Println("Error connecting:", err)
+				return
+			}
+			defer conn.Close()
 
-		client := &http.Client{
-			Transport: &http.Transport{
-				Dial: func(network, addr string) (net.Conn, error) {
-					return conn, nil
+			client := &http.Client{
+				Transport: &http.Transport{
+					Dial: func(network, addr string) (net.Conn, error) {
+						return conn, nil
+					},
 				},
-			},
-			Timeout: 10 * time.Second,
-		}
+				Timeout: 10 * time.Second,
+			}
 
-		for n := 0; n < b.N; n++ {
-			doPostMultiConn(client, b)
-		}
+			for n := 0; n < b.N; n++ {
+				doPostMultiConn10m(client, b)
+			}
+			n.Done()
+
+		}(i)
 	}
+	n.Wait()
 
 }
 
-func doPostMultiConn(client *http.Client, b *testing.B) {
+func doPostMultiConn10m(client *http.Client, b *testing.B) {
 	u := &httpjson.User{
 		Email:    "foo@bar.com",
 		Name:     "Bench",

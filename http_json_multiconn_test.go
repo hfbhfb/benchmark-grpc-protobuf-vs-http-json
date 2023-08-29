@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"sync"
 	"testing"
 	"time"
 
@@ -17,28 +18,38 @@ func init() {
 }
 
 func BenchmarkHTTPJSONMultiConn(b *testing.B) {
+
 	b.Log(b.N)
-	for i := 0; i < 100; i++ {
-		conn, err := net.Dial("tcp", "127.0.0.1:60001")
-		if err != nil {
-			fmt.Println("Error connecting:", err)
-			return
-		}
-		defer conn.Close()
+	goRouting := 100
 
-		client := &http.Client{
-			Transport: &http.Transport{
-				Dial: func(network, addr string) (net.Conn, error) {
-					return conn, nil
+	var n sync.WaitGroup
+	for i := 1; i <= goRouting; i++ {
+		n.Add(1)
+		go func(amount int) {
+			conn, err := net.Dial("tcp", "127.0.0.1:60001")
+			if err != nil {
+				fmt.Println("Error connecting:", err)
+				return
+			}
+			defer conn.Close()
+
+			client := &http.Client{
+				Transport: &http.Transport{
+					Dial: func(network, addr string) (net.Conn, error) {
+						return conn, nil
+					},
 				},
-			},
-			Timeout: 10 * time.Second,
-		}
+				Timeout: 10 * time.Second,
+			}
 
-		for n := 0; n < b.N; n++ {
-			doPostMultiConn(client, b)
-		}
+			for n := 0; n < b.N; n++ {
+				doPostMultiConn(client, b)
+			}
+			n.Done()
+
+		}(i)
 	}
+	n.Wait()
 
 }
 
