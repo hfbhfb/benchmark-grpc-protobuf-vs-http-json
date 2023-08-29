@@ -8,6 +8,17 @@ import (
 	"net/mail"
 )
 
+var (
+	FlagSleep = false
+)
+
+// Start entrypoint
+func StartDelay() {
+	FlagSleep = true
+	http.HandleFunc("/", CreateUser)
+	log.Println(http.ListenAndServe(":60001", nil))
+}
+
 // Start entrypoint
 func Start() {
 	http.HandleFunc("/", CreateUser)

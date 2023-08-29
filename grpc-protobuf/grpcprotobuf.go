@@ -5,11 +5,26 @@ import (
 	"log"
 	"net"
 	"net/mail"
+	"time"
 
 	"github.com/plutov/benchmark-grpc-protobuf-vs-http-json/grpc-protobuf/proto"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
+
+var (
+	FlagSleep = false
+)
+
+// Start entrypoint
+func StartDelay() {
+	lis, _ := net.Listen("tcp", ":80")
+	FlagSleep = true
+
+	srv := grpc.NewServer()
+	proto.RegisterAPIServer(srv, &Server{})
+	log.Println(srv.Serve(lis))
+}
 
 // Start entrypoint
 func Start() {
@@ -34,6 +49,10 @@ func (s *Server) CreateUser(ctx context.Context, in *proto.User) (*proto.Respons
 	}
 
 	in.Id = "1000000"
+	if FlagSleep {
+		time.Sleep(10 * time.Millisecond)
+	}
+
 	return &proto.Response{
 		Code:    200,
 		Message: "OK",
