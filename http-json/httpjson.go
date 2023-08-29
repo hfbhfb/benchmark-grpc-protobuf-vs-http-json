@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"net/mail"
+	"time"
 )
 
 var (
@@ -55,6 +56,9 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 			Message: validationErr.Error(),
 		})
 		return
+	}
+	if FlagSleep {
+		time.Sleep(10 * time.Millisecond)
 	}
 
 	user.ID = "1000000"
