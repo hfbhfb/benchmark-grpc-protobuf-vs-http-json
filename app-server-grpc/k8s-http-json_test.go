@@ -6,19 +6,20 @@ import (
 	"net/http"
 	"sync"
 	"testing"
-	"time"
+	//"time"
 
 	httpjson "github.com/plutov/benchmark-grpc-protobuf-vs-http-json/http-json"
 )
 
 func init() {
-	go httpjson.Start()
-	time.Sleep(time.Second)
+	//go httpjson.Start()
+	//time.Sleep(time.Second)
 }
 
 func BenchmarkHTTPJSON(b *testing.B) {
-	goRouting := 8
-	aCount := b.N / goRouting
+	b.Log(b.N)
+	goRouting := 100
+	aCount := b.N
 
 	var n sync.WaitGroup
 	for i := 1; i <= goRouting; i++ {
@@ -46,7 +47,7 @@ func doPost(client *http.Client, b *testing.B) {
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(u)
 
-	resp, err := client.Post("http://127.0.0.1:60001/", "application/json", buf)
+	resp, err := client.Post("http://192.168.1.82:30601/", "application/json", buf)
 	if err != nil {
 		b.Fatalf("http request failed: %v", err)
 	}
