@@ -3,41 +3,46 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
+	"net"
 	"net/http"
-	"sync"
 	"testing"
+	"time"
 
 	httpjson "github.com/plutov/benchmark-grpc-protobuf-vs-http-json/http-json"
 )
 
 func init() {
-	// go httpjson.Start()
-	// time.Sleep(time.Second)
+
 }
 
-func BenchmarkHTTPJSON(b *testing.B) {
-	goRouting := 100
-	//aCount := b.N / goRouting
-	aCount := b.N
+func BenchmarkHTTPJSONMultiConn(b *testing.B) {
+	b.Log(b.N)
+	for i := 0; i < 100; i++ {
+		conn, err := net.Dial("tcp", "192.168.1.81:30901")
+		if err != nil {
+			fmt.Println("Error connecting:", err)
+			return
+		}
+		defer conn.Close()
 
-	var n sync.WaitGroup
-	for i := 1; i <= goRouting; i++ {
-		n.Add(1)
-		go func(amount int) {
+		client := &http.Client{
+			Transport: &http.Transport{
+				Dial: func(network, addr string) (net.Conn, error) {
+					return conn, nil
+				},
+			},
+			Timeout: 10 * time.Second,
+		}
 
-			client := &http.Client{}
-
-			for n := 0; n < aCount; n++ {
-				doPost(client, b)
-			}
-			n.Done()
-		}(i)
+		for n := 0; n < b.N; n++ {
+			doPostMultiConn(client, b)
+		}
 	}
-	n.Wait()
 
 }
 
-func doPost(client *http.Client, b *testing.B) {
+func doPostMultiConn(client *http.Client, b *testing.B) {
 	u := &httpjson.User{
 		Email:    "foo@bar.com",
 		Name:     "Bench",

@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/plutov/benchmark-grpc-protobuf-vs-http-json/grpc-protobuf"
+	grpcprotobuf "github.com/plutov/benchmark-grpc-protobuf-vs-http-json/grpc-protobuf"
 	"github.com/plutov/benchmark-grpc-protobuf-vs-http-json/grpc-protobuf/proto"
 	"golang.org/x/net/context"
 	g "google.golang.org/grpc"
@@ -16,6 +16,8 @@ func init() {
 }
 
 func BenchmarkGRPCProtobuf(b *testing.B) {
+	// b.Log(b.N)
+	// b.Log()
 	conn, err := g.Dial("127.0.0.1:60000", g.WithInsecure())
 	if err != nil {
 		b.Fatalf("grpc connection failed: %v", err)
