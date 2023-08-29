@@ -3,34 +3,36 @@ package main
 import (
 	"sync"
 	"testing"
-	"time"
+	//"time"
 
-	grpcprotobuf "github.com/plutov/benchmark-grpc-protobuf-vs-http-json/grpc-protobuf"
+	//grpcprotobuf "github.com/plutov/benchmark-grpc-protobuf-vs-http-json/grpc-protobuf"
 	"github.com/plutov/benchmark-grpc-protobuf-vs-http-json/grpc-protobuf/proto"
 	"golang.org/x/net/context"
 	g "google.golang.org/grpc"
 )
 
 func init() {
-	go grpcprotobuf.Start()
-	time.Sleep(time.Second)
+	//go grpcprotobuf.Start()
+	//time.Sleep(time.Second)
 }
 
 func BenchmarkGRPCProtobuf(b *testing.B) {
-	goRouting := 8
-	aCount := b.N / goRouting
+	b.Log(b.N)
+	goRouting := 100
 
-	var n sync.WaitGroup
-	for i := 1; i <= goRouting; i++ {
-		n.Add(1)
-		go func(amount int) {
-
-			conn, err := g.Dial("127.0.0.1:60000", g.WithInsecure())
+			conn, err := g.Dial("192.168.1.82:30600", g.WithInsecure())
 			// conn, err := g.Dial("192.168.1.81:30600", g.WithInsecure())
 			if err != nil {
 				b.Fatalf("grpc connection failed: %v", err)
 			}
 
+
+	aCount := b.N
+
+	var n sync.WaitGroup
+	for i := 1; i <= goRouting; i++ {
+		n.Add(1)
+		go func(amount int) {
 			client := proto.NewAPIClient(conn)
 
 			for n := 0; n < aCount; n++ {
