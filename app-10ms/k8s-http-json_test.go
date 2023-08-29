@@ -16,15 +16,16 @@ func init() {
 }
 
 func BenchmarkHTTPJSON(b *testing.B) {
-	goRouting := 20
-	aCount := b.N / goRouting
+	goRouting := 100
+	//aCount := b.N / goRouting
+	aCount := b.N
 
 	var n sync.WaitGroup
 	for i := 1; i <= goRouting; i++ {
 		n.Add(1)
 		go func(amount int) {
 
-			client := &http.Client{}
+	client := &http.Client{}
 
 			for n := 0; n < aCount; n++ {
 				doPost(client, b)

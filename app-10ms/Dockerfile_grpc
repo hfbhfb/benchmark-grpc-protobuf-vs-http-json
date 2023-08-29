@@ -1,0 +1,4 @@
+FROM centos:centos7.6.1810
+MAINTAINER hfb
+ADD ./app-10ms /app-10ms
+CMD [ "sh", "-c", "/app-10ms" ]

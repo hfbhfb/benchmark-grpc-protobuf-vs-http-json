@@ -15,19 +15,20 @@ func init() {
 }
 
 func BenchmarkGRPCProtobuf(b *testing.B) {
-	goRouting := 20
-	aCount := b.N / goRouting
+	goRouting := 100
+	aCount := b.N
+	//aCount := b.N / goRouting
 
+			conn, err := g.Dial("192.168.1.82:30800", g.WithInsecure())
+			// conn, err := g.Dial("192.168.1.81:30600", g.WithInsecure())
+			if err != nil {
+				b.Fatalf("grpc connection failed: %v", err)
+			}
 	var n sync.WaitGroup
 	for i := 1; i <= goRouting; i++ {
 		n.Add(1)
 		go func(amount int) {
 
-			conn, err := g.Dial("192.168.1.81:30800", g.WithInsecure())
-			// conn, err := g.Dial("192.168.1.81:30600", g.WithInsecure())
-			if err != nil {
-				b.Fatalf("grpc connection failed: %v", err)
-			}
 
 			client := proto.NewAPIClient(conn)
 
