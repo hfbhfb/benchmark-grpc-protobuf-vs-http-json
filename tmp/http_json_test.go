@@ -1,4 +1,4 @@
-package main
+package benchmarks
 
 import (
 	"bytes"
@@ -6,33 +6,38 @@ import (
 	"net/http"
 	"sync"
 	"testing"
-
-	//"time"
+	"time"
 
 	httpjson "github.com/plutov/benchmark-grpc-protobuf-vs-http-json/http-json"
 )
 
 func init() {
-	//go httpjson.Start()
-	//time.Sleep(time.Second)
+	go httpjson.Start()
+	time.Sleep(time.Second)
 }
 
 func BenchmarkHTTPJSON(b *testing.B) {
+	/*
+		client := &http.Client{}
+
+		for n := 0; n < b.N; n++ {
+			doPost(client, b)
+		}
+	*/
 	b.Log(b.N)
-	goRouting := 1 // client := &http.Client{} 这样的写法,超过2时,后续的Post请求会创建很多的连接
-	aCount := b.N
+
+	goRouting := 2
 
 	var n sync.WaitGroup
 	for i := 1; i <= goRouting; i++ {
 		n.Add(1)
 		go func(amount int) {
-
 			client := &http.Client{}
-
-			for n := 0; n < aCount; n++ {
+			for n := 0; n < b.N; n++ {
 				doPost(client, b)
 			}
 			n.Done()
+
 		}(i)
 	}
 	n.Wait()
@@ -48,7 +53,7 @@ func doPost(client *http.Client, b *testing.B) {
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(u)
 
-	resp, err := client.Post("http://192.168.1.82:30601/", "application/json", buf)
+	resp, err := client.Post("http://127.0.0.1:60001/", "application/json", buf)
 	if err != nil {
 		b.Fatalf("http request failed: %v", err)
 	}
