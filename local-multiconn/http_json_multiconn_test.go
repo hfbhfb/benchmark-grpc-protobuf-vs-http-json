@@ -14,7 +14,8 @@ import (
 )
 
 func init() {
-
+	go httpjson.Start()
+	time.Sleep(time.Second)
 }
 
 func BenchmarkHTTPJSONMultiConn(b *testing.B) {
