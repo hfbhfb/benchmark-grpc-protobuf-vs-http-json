@@ -16,7 +16,7 @@ func init() {
 }
 
 func BenchmarkHTTPJSON(b *testing.B) {
-	goRouting := 100
+	goRouting := 1
 	//aCount := b.N / goRouting
 	aCount := b.N
 
@@ -46,7 +46,7 @@ func doPost(client *http.Client, b *testing.B) {
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(u)
 
-	resp, err := client.Post("http://192.168.1.81:30901/", "application/json", buf)
+	resp, err := client.Post("http://192.168.1.82:30901/", "application/json", buf)
 	if err != nil {
 		b.Fatalf("http request failed: %v", err)
 	}

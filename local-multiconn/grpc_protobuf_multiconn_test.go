@@ -17,7 +17,7 @@ func init() {
 }
 
 func BenchmarkGRPCProtobuf(b *testing.B) {
-	// b.Log(b.N)
+	b.Log(b.N)
 	// b.Log()
 	/*
 		conn, err := g.Dial("127.0.0.1:60000", g.WithInsecure())

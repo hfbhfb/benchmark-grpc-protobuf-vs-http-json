@@ -24,7 +24,7 @@ func BenchmarkHTTPJSONMultiConn10m(b *testing.B) {
 	for i := 1; i <= goRouting; i++ {
 		n.Add(1)
 		go func(amount int) {
-			conn, err := net.Dial("tcp", "192.168.1.81:30901")
+			conn, err := net.Dial("tcp", "192.168.1.82:30901")
 			if err != nil {
 				fmt.Println("Error connecting:", err)
 				return
@@ -60,7 +60,7 @@ func doPostMultiConn10m(client *http.Client, b *testing.B) {
 	buf := new(bytes.Buffer)
 	json.NewEncoder(buf).Encode(u)
 
-	resp, err := client.Post("http://192.168.1.81:30901/", "application/json", buf)
+	resp, err := client.Post("http://192.168.1.82:30901/", "application/json", buf)
 	if err != nil {
 		b.Fatalf("http request failed: %v", err)
 	}

@@ -3,6 +3,7 @@ package main
 import (
 	"sync"
 	"testing"
+
 	//"time"
 
 	//grpcprotobuf "github.com/plutov/benchmark-grpc-protobuf-vs-http-json/grpc-protobuf"
@@ -20,12 +21,11 @@ func BenchmarkGRPCProtobuf(b *testing.B) {
 	b.Log(b.N)
 	goRouting := 100
 
-			conn, err := g.Dial("192.168.1.82:30600", g.WithInsecure())
-			// conn, err := g.Dial("192.168.1.81:30600", g.WithInsecure())
-			if err != nil {
-				b.Fatalf("grpc connection failed: %v", err)
-			}
-
+	conn, err := g.Dial("192.168.1.82:30600", g.WithInsecure())
+	// conn, err := g.Dial("192.168.1.81:30600", g.WithInsecure())
+	if err != nil {
+		b.Fatalf("grpc connection failed: %v", err)
+	}
 
 	aCount := b.N
 
